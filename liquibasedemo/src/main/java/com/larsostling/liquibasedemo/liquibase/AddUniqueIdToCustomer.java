@@ -1,9 +1,11 @@
 package com.larsostling.liquibasedemo.liquibase;
 
 import liquibase.change.custom.CustomTaskChange;
+import liquibase.change.custom.CustomTaskRollback;
 import liquibase.database.Database;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.CustomChangeException;
+import liquibase.exception.RollbackImpossibleException;
 import liquibase.exception.SetupException;
 import liquibase.exception.ValidationErrors;
 import liquibase.resource.ResourceAccessor;
@@ -15,11 +17,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.UUID;
 
-public class AddUniqueIdToCustomer implements CustomTaskChange {
+public class AddUniqueIdToCustomer implements CustomTaskChange, CustomTaskRollback {
 
     private static String ADD_COLUMN_UNIQUE_ID = "alter table customer add uniqueid varchar(36)";
     private static String SELECT_ID_FROM_CUSTOMER = "select id from customer";
     private static String UPDATE_TABLE_STATEMENT = "update customer set uniqueid = ? where id = ?";
+
+    private static String DROP_COLUMN_UNIQUE_ID = "alter table customer drop uniqueid";
 
     @Override
     public void execute(Database database) throws CustomChangeException {
@@ -59,5 +63,15 @@ public class AddUniqueIdToCustomer implements CustomTaskChange {
     @Override
     public ValidationErrors validate(Database database) {
         return null;
+    }
+
+    @Override
+    public void rollback(Database database) throws CustomChangeException, RollbackImpossibleException {
+        Connection connection = ((JdbcConnection) database.getConnection()).getUnderlyingConnection();
+        try (Statement statement = connection.createStatement()) {
+            statement.execute(DROP_COLUMN_UNIQUE_ID);
+        } catch (Exception e) {
+            throw new CustomChangeException(e);
+        }
     }
 }
