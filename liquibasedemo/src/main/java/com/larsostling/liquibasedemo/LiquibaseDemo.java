@@ -5,7 +5,7 @@ package com.larsostling.liquibasedemo;
  */
 public class LiquibaseDemo {
 
-    public static void main( String[] args ) {
+    public static void main(String[] args) {
         System.out.println( "Hello World!" );
     }
 

@@ -5,8 +5,8 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.2.xsd">
 
-    <!--<include file="liquibase/changelog-1.0.xml"/>-->
-    <!--<include file="liquibase/changelog-1.1.xml"/>-->
-    <!--<include file="liquibase/changelog-2.0.xml"/>-->
+    <changeSet id="add_unique_id_to_customer" author="larsostling">
+        <customChange class="com.larsostling.liquibasedemo.liquibase.AddUniqueIdToCustomer"/>
+    </changeSet>
 
 </databaseChangeLog>
