@@ -7,9 +7,9 @@ import org.flywaydb.core.Flyway;
  */
 public class FlywayDemo {
 
-    public static void main( String[] args ) {
+    public static void main(String[] args) {
         Flyway flyway = new Flyway();
-        flyway.setDataSource("jdbc:h2:file:target/demodb", "sa", null);
+        flyway.setDataSource("jdbc:h2:file:target/flywaydemo", "sa", null);
         flyway.migrate();
     }
 
